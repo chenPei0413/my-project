@@ -1,0 +1,15 @@
+<!--pages/home/home.wxml-->
+<w-swiper list="{{banners}}" />
+<w-recommend recommends="{{recommends}}" bind:imageLoad="handleImageLoad"/>
+<w-popular />
+<w-tab-control id="tab-control" class="{{isTabFixed ? 'fixed' : ''}}" titles="{{titles}}" bind:itemClick="handleTabClick"/>
+<w-tab-control titles="{{titles}}" wx:if="{{isTabFixed}}" />
+<w-goods goods="{{goods[currentType].list}}" />
+<w-backTop wx:if="{{showBackTop}}" />
+
+<!-- <view class="goods">
+  <view class="goods-item" wx:for="{{goods[currentType].list}}" wx:key="index">
+    <w-goods-item item="{{item}}" />
+  </view>
+</view> -->
+

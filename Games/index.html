@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>打地鼠</title>
+    <style>
+        h4{
+            margin:0;
+        }
+        .scene{
+            position: relative;
+            width:750px;
+            height:550px;
+            user-select: none;/*无法选中图片*/
+        }
+        #hammer1{
+            display: none;
+            position: absolute;
+            /* 鼠标正对hammer的中心点 */
+            margin-left:-40px;
+            margin-top:-40px;
+            left:50%;
+            top:50%;
+            cursor: none;/*隐藏箭头*/
+            user-select: none;/*无法选中图片*/
+            z-index: 999;
+        }
+        div[id^="hollow"]{ 
+            position: absolute;
+            
+            width:102px;
+            height:103px;
+            overflow: hidden;
+        }
+        #hollow1{
+            top:160px;
+            left:140px;
+        }
+        
+        #hollow2{
+            top:160px;
+            left:330px;
+        }
+        #hollow3{
+            top:160px;
+            left:528px;
+        }
+        #hollow4{
+            top:248px;
+            left:117px;
+        }
+        #hollow5{
+            top:248px;
+            left:334px;
+        }
+        #hollow6{
+            top:248px;
+            left:532px;
+        }
+        #hollow7{
+            top:340px;
+            left:109px;
+        }
+        #hollow8{
+            top:344px;
+            left:334px;
+        }
+        #hollow9{
+            top:350px;
+            left:551px;
+        }
+
+        img[id^="mouse"]{
+            /* border:1px solid red; */
+            position: absolute;  
+            top:104px;
+        }
+        .scorebox{
+            position: absolute;
+            width:110px;
+            height:20px;
+            left:230px;
+            top:195px;
+            /* border:1px solid red; */
+            text-align: center;
+        }
+        .scorebox span{
+            font-size: 18px;
+            line-height: 20px;
+            color:rgba(0,0,0,0.8);
+        }
+        #lefttimebox{
+            position: absolute;
+            width:110px;
+            height:20px;
+            left:484px;
+            top:195px;
+            background-color: #fff;
+            text-align: center;
+        } 
+        #lefttimebox i{
+            font-style: normal;
+        }
+        #lefttimebox span{
+            font-size: 16px;
+            line-height: 20px;
+            color:rgba(0,0,0,0.8);
+        }
+        #btn{
+            width:110px;
+            height:20px;
+            background-color: #fff;
+            font-size: 16px;
+            line-height: 20px;
+            border:none;
+        }
+        .alertWin{
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left:-200px;
+            margin-top:-175px;
+            width:400px;
+            height: 350px;
+            padding: 10px 20px;
+            border:5px solid darkgreen;
+            border-radius: 40px;
+            background-color: rgb(194, 247, 194);
+            opacity: 0.9;
+            z-index: 10;
+            overflow: hidden;
+            text-align: center;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+            color:#444;
+            box-sizing: border-box;
+        }
+        .resultBlock{
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s linear;
+
+        }
+        .notice{
+            display: block;
+        }
+
+
+        .result{
+            display: none;
+        }
+        .btn{
+            position: absolute;
+           
+            width: 80px;
+            height: 35px;
+            
+            background-color: darkgreen;
+            color:#fff;
+            border:1px solid darkgreen;
+            border-radius: 10px;
+            box-shadow: 2px 1px 3px rgba(0,0,0,0.2);
+            cursor: pointer;
+            
+            outline: none;
+            transition: all 0.2s linear;
+        }
+        .resultNotice span{
+            font-size: 32px;
+            color: red;
+        }
+        .btn:hover{
+            transform:  translateX(50%) scale(1.1);
+        }
+        .start{
+            top: 84%;
+            right: 50%;
+            transform: translateX(50%);
+        }
+        .restart{
+            bottom: 30%;
+            left: 10%;
+            transform: translateX(50%);
+        }
+        .refresh{
+            bottom:  30%;
+            right: 30%;
+            transform: translateX(50%);
+        }
+        .alertWin h2{
+            text-align: center;
+            color: #333;
+        }
+        .alertWin p{
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        .alertWin .allstar{
+            margin:20px auto;
+            background-image: url("./images/ic_rating_s@2x.png");
+            background-position-y: 0;
+            width:110px;
+            height: 22px;
+        }
+        .rule{
+            position: absolute;
+            top: 158px;
+            right: 112px;
+            color: rgba(0,0,0,0.5);
+            border-radius: 14px;
+            border:1px solid rgba(0,0,0,0.5);
+            width: 14px;
+            height: 14px;
+            text-align: center;
+            line-height: 14px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .rule:hover {
+            background-color: rgba(0,0,0,0.5);
+            color:#fff;
+        }
+        .starBlock{
+            position: absolute;
+            left: 395px;
+            width:400px;
+            height: 350px;
+            top: 0;
+            transition: all 0.3s linear;
+        }
+        .starBlock  p{
+            margin-top: 30px;
+            margin-bottom: 0;
+            font-weight: 200;
+            font-size: 18px;
+        }
+        .starBlock .backTo{
+            position: absolute;
+            transform: scale(0.9);
+            top: 10px;
+            left: 14px;
+        }
+        .backTo:hover{
+            transform:  scale(1);
+
+
+        }
+        .starBlock .content{
+            position: relative;
+            width:250px;
+            /* height: 300px; */
+            padding: 22px;
+            padding-left: 0;
+            margin:20px auto;
+            margin-top: 0;
+            /* border-radius: 22px; */
+            /* border: 2px solid rgba(0,0,0,0.2); */
+        }
+        .startToScore{
+            position: absolute;
+            right: 40px;
+            height: 22px;
+            text-align: center;
+            line-height: 22px;
+            color:rgba(0,0,0,0.5);
+            font-size: 13px;
+        }
+        .tenth{
+            top: 22px;
+        }
+        .ninth{
+            top: 44px;
+        }
+        .eighth{
+            top: 66px;
+        }
+        .seventh{
+            top: 88px;
+        }
+        .sixth{
+            top: 110px;
+        }
+        .fifth{
+            top: 132px;
+        }
+        .fourth{
+            top: 154px;
+        }
+        .third{
+            top: 176px;
+        }
+        .twice{
+            top: 198px;
+        }
+        .first{
+            top: 220px;
+        }
+        .zero{
+            top: 242px;
+        }
+    </style>
+</head>
+<body>
+    
+    <audio src="./LIMGOSPEL - 心灵通货膨胀.mp3" ></audio> 
+    <div class="scene" id="scene">   
+        <div class="alertWin">
+            <div class="notice"> 
+                <h2>打地鼠小游戏</h2>
+                <h4>如何开始</h4>
+                <p>点击屏幕上的开始按钮即可开始游戏</p>
+                <h4>游戏目标</h4>
+                <p>合理操作，挑战高分</p>
+                <h4>游戏介绍</h4>
+                <p>鼠标左键每击中一只地鼠分数加1，一款打地鼠小游戏，小巧轻量，无聊的时候就来打地鼠吧。</p>
+                <button id="startBtn" class="btn start">开始</button>  
+            </div>
+           <div class="result">
+                
+                <div class="resultBlock">
+                    <h2>打地鼠小游戏</h2>
+                    <p class="resultNotice">游戏结束。</p>
+                    <div class="allstar"></div>
+                    <div class="rule">?</div>
+                    <button id="restartBtn" class="btn restart">再来一局</button>
+                    <button id="refreshBtn" class="btn refresh">返回主页</button>
+                </div>
+                <div class="starBlock">
+                    <button class="btn backTo">返回</button>
+                    <p>积分规则</p>
+                    <div class="content">
+                            <img src="./images/ic_rating_s@2x.png" alt="星星积分规则">
+                            <div class="startToScore tenth">>9</div>
+                            <div class="startToScore ninth">9</div>
+                            <div class="startToScore eighth">8</div>
+                            <div class="startToScore seventh">7</div>
+                            <div class="startToScore sixth">6</div>
+                            <div class="startToScore fifth">5</div>
+                            <div class="startToScore fourth">4</div>
+                            <div class="startToScore third">3</div>
+                            <div class="startToScore twice">2</div>
+                            <div class="startToScore first">1</div>
+                            <div class="startToScore zero">0</div>
+                    </div>
+                    
+                </div>
+            
+           </div>
+        </div>
+        <img id="bg" src="./images/bg.png" alt="">
+        <div class="scorebox" >
+            <span id="score">0</span>
+        </div>
+        <div id="lefttimebox" >
+            <span><i id="lefttime">30</i><span>&nbsp;&nbsp;s</span></span> 
+        </div>
+        <img id="hammer1" src="./images/hammer1.png" alt="">
+        <div id="hollow1">
+            <img id="mouse1" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow2">
+            <img id="mouse2" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow3">
+            <img id="mouse3" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow4">
+            <img id="mouse4" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow5">
+            <img id="mouse5" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow6">
+            <img id="mouse6" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow7">
+            <img id="mouse7" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow8">
+            <img id="mouse8" src="./images/mouse1.png" alt="">
+        </div>
+        <div id="hollow9">
+            <img id="mouse9" src="./images/mouse1.png" alt="">
+        </div>
+    </div>
+    <script src="SceneManager.js"></script>
+    <script src="Score.js"></script>
+    <script src="Hammer.js"></script>
+    <script src="Mouse.js"></script>
+    <script>
+
+        var game = {};
+        game.SM= new SceneManager();
+        game.updateTime = 20;
+        game.timer = setInterval(function(){
+            game.SM.update();
+            game.SM.render();
+        },game.updateTime);
+        // game.SM.enter(2);
+        /*
+        var scene = document.getElementById("scene");
+        var hammer1 = document.getElementById("hammer1");
+        var score =document.getElementById("score");
+        var screenscore =Number(score.innerText);
+        var current =Number(score.innerText);
+        var alertWin = document.getElementsByClassName("alertWin")[0];
+        var result = document.getElementsByClassName("result")[0];
+        var resultTxt = document.getElementsByClassName("result")[0].getElementsByClassName("resultNotice")[0];
+        var notice = document.getElementsByClassName("notice")[0];
+        var allStar = document.getElementsByClassName("allstar")[0];
+        var starRule = document.getElementsByClassName("rule")[0];
+        var starBlock = document.getElementsByClassName("starBlock")[0];
+        var resultBlock = document.getElementsByClassName("resultBlock")[0];
+        var backTo = document.getElementsByClassName("backTo")[0];
+        var myAudio = document.getElementsByTagName("audio")[0];
+
+
+        // 倒计时30
+        var countdown=30;
+        var lefttime = document.getElementById("lefttime");
+        // 获取元素——>数组存放洞和老鼠
+        mouseAry = [];
+        hollowAry = [];
+        for(var i =0;i<9;i++){
+            hollowAry[i] = document.getElementById("hollow"+(i+1));
+            mouseAry[i] = document.getElementById("mouse"+(i+1));
+        }
+        function init(){
+            countdown=30;
+            score.innerText = 0;
+        }
+       // 老鼠从地里钻出来
+       var startTop=104;
+        var endTop = 0;
+        var nowTop=104;
+        var timeMaxWait = 1000;
+        var timeWait = 0;
+        var timeloop = 100;
+        var mouseLoop = null;
+        //每隔2s随机出现一只老鼠
+        var number = 0;
+        var mouseShow = null;//老鼠计时器
+        
+        var startBtn = document.getElementById("startBtn");
+        var restartBtn = document.getElementById("restartBtn");
+        var refreshBtn = document.getElementById("refreshBtn");
+        scene.onmousemove = function(e){
+                hammer1.style.top = e.clientY +'px';
+                hammer1.style.left = e.clientX + 'px';
+            }
+            // 锤子落下
+            hammer1.onmousedown = function(){
+                hammer1.src = "./images/hammer2.png";
+            }
+            // 锤子抬起
+            hammer1.onmouseup = function(){
+                hammer1.src = "./images/hammer1.png";
+            }
+        startBtn.onclick = startGame;
+        restartBtn.onclick = startGame;
+        refreshBtn.onclick = function(){
+            location.reload();
+        }
+        function startGame(){
+            if(myAudio.paused){
+                myAudio.load();
+                myAudio.play();
+            }
+            
+            init();
+            // 隐藏弹窗
+            alertWin.style.display = 'none';
+            // 显示锤子
+            hammer1.style.display = 'block';
+            // 锤子移动
+         
+                mouseShow = setInterval(function(){
+                nowTop=104;//初始化
+                timeWait = 0;//初始化
+                screenscore =Number(score.innerText)//初始化:屏幕上的分数
+                currentscore =Number(score.innerText)//初始化:当前实际分数
+                mouseAry[number].src = "./images/mouse1.png" ;
+                number= parseInt(Math.random()*9);//生成0-8的随机数
+                mouseLoop = setInterval(showMouse,timeloop);//让老鼠欢乐地动起来；
+            },2000);
+            // 30s倒计时，页面加载完成便开始计时
+            
+            settime();
+            
+        }
+        
+        
+        function showMouse(){
+            if(nowTop>endTop){
+                // console.log("nowTop>endTop"+ mouseAry[number].style.top);
+                mouseAry[number].style.top=nowTop+'px';
+                nowTop -=12;
+            }
+            if(nowTop<=endTop){
+                mouseAry[number].style.top=endTop+'px';
+                // 强行等待1s
+                if(timeWait<timeMaxWait){
+                    timeWait +=timeloop;
+                }
+                if(timeWait>=timeMaxWait){
+                    clearInterval(mouseLoop);
+                    mouseLoop = null;
+                    mouseAry[number].style.top = "104px";
+                }
+                
+            }
+        }
+        // 打中老鼠的时候，老鼠变脸
+        scene.onclick = function(e){
+            //初始化
+            // 检测碰撞   元素.offset x1<x<x2 y1<y<y2
+            var x = e.clientX;
+            var y = e.clientY;
+           
+            y1 = mouseAry[number].offsetTop+hollowAry[number].offsetTop;
+            x1 = mouseAry[number].offsetLeft+hollowAry[number].offsetLeft;
+            x2 = x1+mouseAry[number].offsetWidth;
+            y2 = y1+mouseAry[number].offsetHeight;
+            if(x>x1&&x<x2&&y>y1&&y<y2){//打中老鼠
+                mouseAry[number].src = "./images/mouse2.png";
+                // console.log(currentscore+' '+screenscore)
+                // 且得分+1
+                if(currentscore==screenscore){
+                    currentscore ++;
+                    score.innerText = currentscore; 
+                }
+                
+            }
+
+        }
+        starRule.onclick = function(){
+            console.log("show starRule!");
+            resultBlock.style.left = "-395px";
+            starBlock.style.left = 0;
+
+        }
+        backTo.onclick = function(){
+            starBlock.style.left = "395px";
+            resultBlock.style.left = "0px";
+        }
+        function settime() {
+                if (countdown >= 0) {
+                    console.log("countdown:"+countdown);
+                    lefttime.innerText = countdown;
+                    countdown--;
+                    setTimeout(function() {
+                        settime()
+                    },1000)
+                } else {
+                    clearInterval(mouseShow);
+                    
+                    if(!myAudio.paused){
+                        myAudio.pause()
+                    }
+                    
+                    setTimeout(function(){
+
+                        hammer1.style.display = 'none';
+                        alertWin.style.display = 'block';
+                        notice.style.display = 'none';
+                        result.style.display = 'block';
+                        var s = Number(score.innerText) ;
+                        var str = '';
+                        var starPos = 0;
+                        switch(s){
+                            case 0: str="你要加油了哦！目前分数有点惨呢：";
+                                    starPos = 22*1;
+                                    break; 
+                            case 1: str="你要加油了哦！目前分数有点惨呢：";
+                                    starPos = 22*2;
+                                    break; 
+                            case 2: str="你要加油了哦！目前分数有点惨呢：";
+                                    starPos = 22*3;
+                                    break;
+                            case 3: str="也算有点小收获呢，不要气馁哦！成绩为：";
+                                    starPos = 22*4;
+                                    break; 
+                            case 4: str="也算有点小收获呢，不要气馁哦！成绩为：";
+                                    starPos = 22*5;
+                                    break; 
+                            case 5: str="也算有点小收获呢，不要气馁哦！成绩为：";
+                                    starPos = 22*6;
+                                    break;
+                            case 6: str="还阔以哦！再接再厉~成绩为：";
+                                    starPos = 22*7;
+                                    break;
+                            case 7: str="哇塞，666~成绩为：";
+                                    starPos = 22*8;
+                                    break; 
+                            case 8: str="你真是个打地鼠小能手！成绩为：";
+                                    starPos = 22*9;
+                                    break;
+                            case 9: str="棒棒哒！差一点就可以全星了！成绩为：";
+                                    starPos = 22*10;
+                                    break;
+                            default:str="(●'◡'●) 天哪，太厉害了！成绩为：";
+                                    starPos = 0;
+                                    break;
+                        }
+                            resultTxt.innerHTML = "时间到！"+str+"<br><span>"+s+"</span>"+" 分~";
+                            allStar.style.backgroundPositionY = starPos + 'px';
+                       
+
+                       
+                       
+                    },1000);
+                       
+                    
+                    
+                }
+        
+            }
+           */
+    </script>
+</body>
+</html>

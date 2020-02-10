@@ -1,0 +1,15 @@
+<!--pages/category/childCpns/w-content/w-content.wxml-->
+<scroll-view class="content" scroll-y>
+  <view class="subcategory">
+    <view class="item" wx:for="{{subcategories}}" wx:key="index">
+      <image src="{{item.image}}" mode='widthFix'/>
+      <view>{{item.title}}</view>
+    </view>
+  </view>
+
+  <view class='detail'>
+    <w-goods goods="{{categoryDetail}}"/>
+  </view>
+  <!-- <image src="{{categoryDetail.data[0].img}}"></image> -->
+</scroll-view>
+

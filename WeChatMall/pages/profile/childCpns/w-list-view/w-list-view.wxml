@@ -1,0 +1,7 @@
+<!--pages/profile/childCpns/w-list-view/w-list-view.wxml-->
+<view class='list-view'>
+  <view class='list-item' wx:for="{{info}}" wx:key="index">
+    <image src="/assets/images/profile/{{item.icon}}"/>
+    <text>{{item.info}}</text>
+  </view>
+</view>

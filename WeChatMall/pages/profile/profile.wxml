@@ -1,0 +1,7 @@
+<!--pages/profile/profile.wxml-->
+<view class="profile">
+  <w-header userInfo="{{userInfo}}" bind:login="loginClick" />
+  <w-info />
+  <w-list-view info="{{orderList}}"/>
+  <w-list-view info="{{serviceList}}"/>
+</view>

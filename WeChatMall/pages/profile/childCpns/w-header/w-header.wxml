@@ -1,0 +1,16 @@
+<!--pages/profile/childCpns/w-header/w-header.wxml-->
+<view class="header">
+  <view class="avatar">
+    <image src="{{userInfo.avatarUrl || imgURL}}" />
+  </view>
+  <view class="login-info">
+    <view class="login">{{userInfo.nickName || "登录/注册"}}</view>
+    <view class="phone">
+      <image src="/assets/images/profile/phone.png" />
+      暂无绑定手机号
+    </view>
+  </view>
+  <button class="arrow" open-type="getUserInfo" bindgetuserinfo='loginClick'>
+    <image src="/assets/images/common/arrow-right.png" />
+  </button>
+</view>
